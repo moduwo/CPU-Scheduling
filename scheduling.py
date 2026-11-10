@@ -335,19 +335,26 @@ def round_robin_scheduling(processes, quantum=QUANTUM):
 
 #Gant Chart Visualization
 def visualize_gantt_chart(gantt_chart):
-    """Visualize the Gantt chart."""
     if not gantt_chart:
-        print("No processes to display in Gantt chart.")
+        print("No processes to display.")
         return
 
+    # Display process names
     print("\nGantt Chart:")
-    for entry in gantt_chart:
-        print(f"| {entry['process_name']} ", end="")
-    print("|")
+    print("|", end="")
 
     for entry in gantt_chart:
-        print(f"{entry['start_time']} ", end="  ")
-    print(f"{gantt_chart[-1]['end_time']}")
+        print(f" {entry['process_name']:^4}|", end="")
+
+    print()
+
+    # Display time markers
+    print(gantt_chart[0]["start_time"], end="")
+
+    for entry in gantt_chart:
+        print(f"{entry['end_time']:>{6}}", end="")
+
+    print()
 
 #Metrics table
 def display_metrics_table(results):
