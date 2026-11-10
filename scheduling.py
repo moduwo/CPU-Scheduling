@@ -200,33 +200,32 @@ def srtf_preemptive_scheduling(processes):
         next_process = min(
             available_processes,
             key=lambda x: (
-                x["burst_time"],
+                x["remaining_time"],
                 x["arrival"],
                 x["name"]
             )
         )
-
         # Record first response time
         if next_process["first_response_time"] is None:
             next_process["first_response_time"] = current_time
 
-        start_time = current_time
-
-        end_time = start_time + next_process["burst_time"]
-
         add_gantt_chart_entry(
             gantt_chart,
             next_process["name"],
-            start_time,
-            end_time
+            current_time,
+            current_time + 1
         )
 
-        current_time = end_time
+        current_time += 1
+        next_process["remaining_time"] -= 1
 
-        next_process["completion_time"] = current_time
-        next_process["remaining_time"] = 0
+        # If the process has completed
+        if next_process["remaining_time"] == 0:
+            next_process["completion_time"] = current_time
+            completed_processes += 1
+            
 
-        completed_processes += 1
+       
 
     results = calculate_average_times(processes)
 
@@ -446,5 +445,7 @@ def main():
 if __name__ == "__main__":
     main()
 
+
+ 
 
  
